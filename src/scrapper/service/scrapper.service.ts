@@ -33,6 +33,10 @@ export class ScrapService implements ScrapServiceInterface {
     const name = json.name;
     const tagsOfImgs = $(".lazyload.crop-image-container__img");
     const listOfImgsSrc : string[] = tagsOfImgs.map((i, img) => $(img).attr("data-src")).get();
+    
+    listOfImgsSrc.pop();
+    
+    listOfImgsSrc.splice(listOfImgsSrc.length / 2);
     const img = $(".lcp-gallery__hook.crop-image-container__img").attr("src");
     
     this.plataformActivity.create(
