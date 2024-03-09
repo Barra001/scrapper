@@ -1,0 +1,46 @@
+name: Build and Eslint workflow
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+    paths:
+      - "**"
+      - ".github/workflows/build-main-back.yaml"
+  pull_request:
+    branches:
+      - main
+      - dev
+    paths:
+      - "**"
+      - ".github/workflows/build-main-back.yaml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: npm install
+        working-directory: .
+
+      - name: Build TypeScript
+        run: npm run build
+        working-directory: .
+
+      - name: Eslint rules
+        uses: icrawl/action-eslint@v1
+
+
+#      - name: Run Jest tests
+#        run: npm test
+#        working-directory: code/node-backend/main-app
