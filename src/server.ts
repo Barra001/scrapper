@@ -8,7 +8,7 @@ export async function initServer(
   platformActivitiesService: PlataformActivitiesServiceInterface
 ): Promise<void> {
   dotenv.config();
-  const port = process.env.API_PORT;
+  const port = process.env.PORT;
 
   const app = express.default();
 
