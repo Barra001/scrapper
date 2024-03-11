@@ -40,13 +40,24 @@ export class ScrapService implements ScrapServiceInterface {
     const sku = json.sku;
     const description = json.description;
     const name = json.name;
+    const brand = json.brand?.name || null;
     const tagsOfImgs = $(".lazyload.crop-image-container__img");
-    const listOfImgsSrc : string[] = tagsOfImgs.map((i, img) => $(img).attr("data-src")).get();
+    const listOfImgsSrc : string[] = tagsOfImgs.map((i, img) => $(img).attr("data-src").replace("220x293.jpg","900x.webp")).get();
     
     listOfImgsSrc.pop();
     
     listOfImgsSrc.splice(listOfImgsSrc.length / 2);
     const img = $(".lcp-gallery__hook.crop-image-container__img").attr("src");
+    // get the tag on class="color-999" and get the text
+    const color = $(".color-999").text() || null;
+    // grab from the first appearance of the word ""sizeInfo":[" to the next appearance of the word "]" and get the text
+    const preSizeText = html.data.split('"sizeInfo":')[1].split(']')[0] || null;
+    const sizesJson = preSizeText ? JSON.parse(preSizeText + "]") : null;
+    const sizes = sizesJson
+      ? sizesJson.map((size) => size.attr_value_name)
+      : null;
+
+
     const endTimeOfEntireOperaton = new Date();
     this.plataformActivity.create(
       "The entire operation took: " +
@@ -55,6 +66,6 @@ export class ScrapService implements ScrapServiceInterface {
       "System",
       LogType.info
     );
-    return new Item(sku, name, price,symbol, description, img, listOfImgsSrc);
+    return new Item(sku, name, price,symbol, description, img, listOfImgsSrc, brand, color, sizes);
   }
 }
