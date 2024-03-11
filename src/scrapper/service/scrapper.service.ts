@@ -13,8 +13,9 @@ export class ScrapService implements ScrapServiceInterface {
 
   async scrap(url : string): Promise<Item> {
     const startTime = new Date();
+    const shortUrl = url.split("?")[0];
     this.plataformActivity.create(
-      "Starting to scrap the page: " + url,
+      "Starting to scrap the page: " + shortUrl,
       "System",
       LogType.info
     );
