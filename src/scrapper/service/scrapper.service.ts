@@ -13,7 +13,7 @@ export class ScrapService implements ScrapServiceInterface {
 
   async scrap(url : string): Promise<Item> {
     const startTime = new Date();
-    const shortUrl = url.split("?")[0];
+    const shortUrl = url.split("/")[2];
     this.plataformActivity.create(
       "Starting to scrap the page: " + shortUrl,
       "System",
@@ -34,7 +34,6 @@ export class ScrapService implements ScrapServiceInterface {
     const script = $("#goodsDetailSchema").html();
     
     const json = JSON.parse(script);
-    console.log(html);
     const priceString = json.price || json.offers.price;
     const price = parseFloat(priceString);
     const symbol = json.priceCurrency || json.offers.priceCurrency;
@@ -52,7 +51,7 @@ export class ScrapService implements ScrapServiceInterface {
     this.plataformActivity.create(
       "The entire operation took: " +
         (endTimeOfEntireOperaton.getTime() - startTime.getTime()) +
-        "ms",
+        "ms " + "The prosessing took: " + (endTimeOfEntireOperaton.getTime() - endTimeOfGetRequest.getTime()) + "ms",
       "System",
       LogType.info
     );
