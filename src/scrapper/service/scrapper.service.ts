@@ -12,13 +12,22 @@ export class ScrapService implements ScrapServiceInterface {
   ) {}
 
   async scrap(url : string): Promise<Item> {
+    const startTime = new Date();
     this.plataformActivity.create(
       "Starting to scrap the page: " + url,
-      "admin",
+      "System",
       LogType.info
     );
 
     const html = await axios.get(url);
+    const endTimeOfGetRequest = new Date();
+    this.plataformActivity.create(
+      "The get request took: " +
+        (endTimeOfGetRequest.getTime() - startTime.getTime()) +
+        "ms",
+      "System",
+      LogType.info
+    );
     
     const $ = load(html.data);
     const script = $("#goodsDetailSchema").html();
@@ -38,13 +47,14 @@ export class ScrapService implements ScrapServiceInterface {
     
     listOfImgsSrc.splice(listOfImgsSrc.length / 2);
     const img = $(".lcp-gallery__hook.crop-image-container__img").attr("src");
-    
+    const endTimeOfEntireOperaton = new Date();
     this.plataformActivity.create(
-      "Scrap done for: " + url,
-      "admin",
+      "The entire operation took: " +
+        (endTimeOfEntireOperaton.getTime() - startTime.getTime()) +
+        "ms",
+      "System",
       LogType.info
     );
-
     return new Item(sku, name, price,symbol, description, img, listOfImgsSrc);
   }
 }
