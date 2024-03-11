@@ -52,7 +52,7 @@ export class ScrapService implements ScrapServiceInterface {
     const color = $(".color-999").text() || null;
     // grab from the first appearance of the word ""sizeInfo":[" to the next appearance of the word "]" and get the text
     const preSizeText = html.data.split('"sizeInfo":')[1].split(']')[0] || null;
-    const sizesJson = preSizeText ? JSON.parse(preSizeText + "]") : null;
+    const sizesJson = preSizeText && preSizeText != '[{"size":null}' ? JSON.parse(preSizeText + "]") : null;
     const sizes = sizesJson
       ? sizesJson.map((size) => size.attr_value_name)
       : null;
